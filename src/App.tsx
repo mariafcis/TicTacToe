@@ -8,6 +8,7 @@ import {
   Image,
   Dimensions,
   FlatList,
+  Alert,
 } from 'react-native';
 import Constants from './Constants';
 import {IPlayer, ETicTacToeLetter} from './models';
@@ -41,8 +42,29 @@ const App = () => {
     setMarkers(new Array(9).fill(''));
   };
 
+  const showWinnerAlert = (winner: IPlayer) => {
+    Alert.alert(
+      'Congratulations!!!',
+      `Player ${winner?.player_letter} Won!`,
+      [
+        {
+          text: 'OK',
+          style: 'cancel',
+        },
+
+        {
+          text: 'Rematch',
+          onPress: () => resetMarkers(),
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
+
   const calculateWinner = (squares: IPlayer[]) => {
-    const lines = [
+    const win_lines = [
       [0, 1, 2],
       [3, 4, 5],
       [6, 7, 8],
@@ -52,8 +74,8 @@ const App = () => {
       [0, 4, 8],
       [2, 4, 6],
     ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
+    for (let i = 0; i < win_lines.length; i++) {
+      const [a, b, c] = win_lines[i];
       if (
         squares[a]?.player_letter &&
         squares[a].player_letter === squares[b].player_letter &&
@@ -65,13 +87,32 @@ const App = () => {
     return null;
   };
 
-  useEffect(() => {
-    const winner = calculateWinner(markers);
-    if (winner?.player_letter) {
-      alert(`Player ${winner?.player_letter} Won!`);
-      resetMarkers();
-    }
-  }, [markers]);
+  const renderPlayerName = (active_player: IPlayer) => {
+    return (
+      <View
+        style={[
+          styles.playerInfo,
+          {
+            backgroundColor:
+              active_player.player_letter === ETicTacToeLetter.X
+                ? Constants.X_Color
+                : Constants.O_Color,
+          },
+        ]}>
+        <Text style={styles.playerTxt}>
+          Player {active_player.player_letter}'s turn
+        </Text>
+      </View>
+    );
+  };
+
+  const renderReplay = () => {
+    return (
+      <Pressable style={styles.cancleBTN} onPress={resetMarkers}>
+        <Image source={Constants.Replay_Img} style={styles.cancelIcon} />
+      </Pressable>
+    );
+  };
 
   const renderTicTacToeItem = ({
     item,
@@ -96,7 +137,7 @@ const App = () => {
     );
   };
 
-  const renderTicTacToeGrid = () => {
+  const renderTicTacToeGrid = (markers: IPlayer[]) => {
     return (
       <FlatList
         numColumns={3}
@@ -106,36 +147,17 @@ const App = () => {
     );
   };
 
-  const renderPlayerName = () => {
-    return (
-      <View
-        style={[
-          styles.playerInfo,
-          {
-            backgroundColor:
-              active_player.player_letter === ETicTacToeLetter.X
-                ? Constants.X_Color
-                : Constants.O_Color,
-          },
-        ]}>
-        <Text style={styles.playerTxt}>
-          Player {active_player.player_letter}'s turn
-        </Text>
-      </View>
-    );
-  };
-  const renderReplay = () => {
-    return (
-      <Pressable style={styles.cancleBTN} onPress={resetMarkers}>
-        <Image source={Constants.Replay_Img} style={styles.cancelIcon} />
-      </Pressable>
-    );
-  };
+  useEffect(() => {
+    const winner = calculateWinner(markers);
+    if (winner?.player_letter) {
+      showWinnerAlert(winner);
+    }
+  }, [markers]);
 
   return (
     <SafeAreaView style={styles.body}>
-      {renderPlayerName()}
-      {renderTicTacToeGrid()}
+      {renderPlayerName(active_player)}
+      {renderTicTacToeGrid(markers)}
       {renderReplay()}
     </SafeAreaView>
   );
