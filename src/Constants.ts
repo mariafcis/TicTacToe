@@ -17,6 +17,6 @@ export default {
   Large_Space: 60,
   Font_Size: 20,
   IconSize: 65,
-  CancelIcon_Size: 80,
+  ReplayIcon_Size: 80,
   Border_Width: 6,
 };
