@@ -12,6 +12,7 @@ export default {
   Background_Color: '#fff', //white
 
   //Dimensions
+  Small_Padding: 10,
   Small_Space: 20,
   Medium_Space: 30,
   Large_Space: 60,
@@ -19,4 +20,6 @@ export default {
   IconSize: 65,
   ReplayIcon_Size: 80,
   Border_Width: 6,
+  Font_Size_Large: 30,
+  Border_Radius: 10,
 };

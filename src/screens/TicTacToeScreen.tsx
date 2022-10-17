@@ -13,13 +13,10 @@ const TicTacToeScreen = () => {
   const [markers, setMarkers] = useState(new Array(9).fill(''));
 
   const markPosition = (position: number) => {
-    console.log('markPosition', position, markers);
-
     if (!markers[position]) {
       let temp = [...markers];
       temp[position] = active_player;
       setMarkers(temp);
-      console.log('temp', temp);
 
       if (active_player.player_letter === ETicTacToeLetter.X) {
         //transfer chances to next player

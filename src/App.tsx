@@ -1,8 +1,8 @@
 import React from 'react';
-import TicTacToeScreen from './screens/TicTacToeScreen';
+import Navigation from './navigation/Navigation';
 
 const App = () => {
-  return <TicTacToeScreen />;
+  return <Navigation />;
 };
 
 export default App;
