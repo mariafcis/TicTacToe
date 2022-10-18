@@ -20,12 +20,7 @@ const checkColumns = (markersArray: IPlayer[]): IPlayer | null => {
   let colSum = 0;
   for (let r = 0; r < 3; r++) {
     colSum = 0;
-    console.log('i', r);
-
     for (let j = 0; j < markersArray.length; j += 3) {
-      console.log('j', j);
-      console.log('i+j', r + j);
-
       if (markersArray[r + j].player_letter == ETicTacToeLetter.X) colSum++;
       else if (markersArray[r + j].player_letter == ETicTacToeLetter.O)
         colSum--;
