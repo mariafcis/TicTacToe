@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, SafeAreaView, FlatList, Alert} from 'react-native';
+import {StyleSheet, SafeAreaView, FlatList} from 'react-native';
 import PlayerName from '../components/PlayerName';
 import ReplayButton from '../components/ReplayButton';
 import TicTacToeItem from '../components/TicTacToeItem';
 import Constants from '../Constants';
+import {checkWinner} from '../helpers/calculateWinner';
 import {IPlayer, ETicTacToeLetter} from '../models';
 
 const TicTacToeScreen = () => {
@@ -31,51 +32,6 @@ const TicTacToeScreen = () => {
     setMarkers(new Array(9).fill(''));
   };
 
-  const showWinnerAlert = (winner: IPlayer) => {
-    Alert.alert(
-      'Congratulations!!!',
-      `Player ${winner?.player_letter} Won!`,
-      [
-        {
-          text: 'OK',
-          style: 'cancel',
-        },
-
-        {
-          text: 'Rematch',
-          onPress: () => resetMarkers(),
-        },
-      ],
-      {
-        cancelable: true,
-      },
-    );
-  };
-
-  const calculateWinner = (squares: IPlayer[]) => {
-    const win_lines = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-    for (let i = 0; i < win_lines.length; i++) {
-      const [a, b, c] = win_lines[i];
-      if (
-        squares[a]?.player_letter &&
-        squares[a].player_letter === squares[b].player_letter &&
-        squares[a].player_letter === squares[c].player_letter
-      ) {
-        return squares[a];
-      }
-    }
-    return null;
-  };
-
   const renderTicTacToeItem = ({
     item,
     index,
@@ -97,10 +53,7 @@ const TicTacToeScreen = () => {
   };
 
   useEffect(() => {
-    const winner = calculateWinner(markers);
-    if (winner?.player_letter) {
-      showWinnerAlert(winner);
-    }
+    checkWinner(markers, resetMarkers);
   }, [markers]);
 
   return (
